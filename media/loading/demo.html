@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Loader 1</title>
+  <link rel="stylesheet" href="loading.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script>
+    $(function () {
+      $('#myswitch').click(function () {
+        // var style_nodes = $('link[rel="stylesheet"], style');
+        // style_nodes.remove();
+
+        $('link[href="loading.css"], style').remove();
+        // $('link[rel="stylesheet"], style').remove();
+
+        // document.getElementsByClassName("loading").style = {};
+        // $('body').toggleClass('loading');
+        // $('body').toggleClass('shape');
+        // $('body').toggleClass('shape-1');
+        // $('body').toggleClass('shape-2');
+        // $('body').toggleClass('shape-3');
+        // $('body').toggleClass('shape-4');
+        // // $('body').toggleClass('loading');
+        // $('body').toggleClass('loading');
+        // $('body').toggleClass('loading');
+      });
+    });
+  </script>
+  <button id="myswitch">Stop Loading</button>
+  <div class="loading">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+  </div>
+</body>
+</html>
