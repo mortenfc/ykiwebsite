@@ -1,4 +1,4 @@
-# ykiwebsite
+Finnish teaching website, ykitest.website
 
 Hello!
 
