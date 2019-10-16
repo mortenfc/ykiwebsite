@@ -115,7 +115,7 @@ if (isset($_GET['level'])) {
                 echo "<p class='lead'><em>No records were found.</em></p>";
               }
             } else {
-              echo "ERROR: Could not able to execute $sql. " . mysqli_error($mysqli);
+              echo "ERROR: Not able to execute $sql. " . mysqli_error($mysqli);
             }
 
             // Close connection

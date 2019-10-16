@@ -1,14 +1,16 @@
 <?php
 
 require 'vendor/autoload.php';
+// require_once 'consolejs.php';
 
 use Mailgun\Mailgun;
 
-$mg = Mailgun::create('1b8fbeced8d7f5b886f0d13a7867d2d7-bbbc8336-cc292e9e', 'https://api.eu.mailgun.net');
+$mg = Mailgun::create('key-0c4171dbc9ce49ac245077abb7035fa3', 'https://api.eu.mailgun.net/v3');
+// $mg = Mailgun::create('1b8fbeced8d7f5b886f0d13a7867d2d7-bbbc8336-cc292e9e', 'https://api.eu.mailgun.net/v3/ykitest.website');
 
 function sendVerificationEmail($userEmail, $token)
 {
-	$body = '
+  $body = '
   <!DOCTYPE html>
     <html lang="en">
 
@@ -55,14 +57,14 @@ function sendVerificationEmail($userEmail, $token)
   </html>
 	';
 
-	global $mg;
-	$mg->messages()->send('ykitest.website', [
-		'from'    => 'pass@ykitest.website',
-		'to'      => $userEmail,
-		'subject' => 'Ykiwebsite Activation Link',
-		'text'    => 'Your email client does not support HTML',
-		'html'    => $body
-	]);
+  global $mg;
+  $mg->messages()->send('ykitest.website', [
+    'from'    => 'yki@ykitest.website',
+    'to'      => $userEmail,
+    'subject' => 'Ykiwebsite Activation Link',
+    'text'    => 'Your email client does not support HTML',
+    'html'    => $body
+  ]);
 
 }
 ?>

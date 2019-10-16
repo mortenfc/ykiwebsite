@@ -78,7 +78,7 @@
       </div>
 
       <script src='https://vjs.zencdn.net/7.6.0/video.js'></script>
-      <script src='../../dist/main.js'></script>
+      <script src='../../dist/course.js'></script>
 
 </body>
 

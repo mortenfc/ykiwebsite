@@ -75,7 +75,7 @@
 
   box-shadow: 1px 1px 2px #80CED7, 0 0 7px rgba(207, 241, 245, 0.796), 0 0 5px #3b5356;
   border-radius: 4px;
-  background-color: rgba(255,255,255);
+  background-color: rgb(255,255,255);
 
 }
 .ol-selectable {

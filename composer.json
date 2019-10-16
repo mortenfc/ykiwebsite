@@ -3,6 +3,9 @@
         "swiftmailer/swiftmailer": "^6.0",
         "true/punycode": "~2.0",
         "twig/cssinliner-extension": "^2.0",
-        "google/recaptcha": "1.2"
+        "google/recaptcha": "1.2",
+        "mailgun/mailgun-php": "^3.0",
+        "kriswallsmith/buzz": "^1.0",
+        "nyholm/psr7": "^1.2"
     }
 }

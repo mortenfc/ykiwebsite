@@ -1,7 +1,8 @@
 <?php
 // Include config file
 require_once "config.php";
-require_once 'sendEmails.php';
+require_once 'mailgunphp.php';
+// require_once 'sendEmails.php';
 require_once './vendor/autoload.php';
 
 
@@ -147,7 +148,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.0/css/font-awesome.min.css"> -->
   <link rel="stylesheet" href="styles.css">
 
   <!-- <link rel="stylesheet" href="strongWeakPW.css"> -->
@@ -156,6 +158,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+
+  <script src='./dist/register.js'></script>
 
   <div class="container">
     <div class="row">
@@ -172,15 +176,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </div>
             <?php endif; ?>
           </div>
-
           <div class="form-group email_wrap <?php echo (!empty($email_err)) ? 'has-error' : ''; ?>">
-            <i class="fas fa-eye-slash"></i>
             <label>Email</label>
-            <i class="fas fa-eye"></i>
-            <span>
-              <input type="text" name="email" class="email form-control form-control-lg" value="<?php echo $email; ?>" required>
-              <i class="far fa-eye"></i>
-            </span>
+            <input type="text" name="email" class="email form-control form-control-lg" value="<?php echo $email; ?>" required>
             <?php if (!empty($email_err)) : ?>
               <div class="alert alert-danger" style="margin-top: 10px;">
                 <li><?php echo $email_err; ?></li>
@@ -190,8 +188,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
           <div class="form-group password_wrap <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
             <label>Password</label>
-            <input id="pw" type="password" name="password" class="password form-control form-control-lg" value="<?php echo $password; ?>" required>
-            <!-- <i style="background" class="far fa-eye"></i> -->
+            <span style="padding: 0;" id="pw-span" class="form-control form-control-lg">
+              <!-- <span id="pw-cnt"> -->
+              <input id="pw" type="password" class="pw-input" name="password" value="<?php echo $password; ?>" required>
+              <!-- </span> -->
+              <!-- <span id="eye-cnt"> -->
+              <i id="eye" class="fas fa-eye" onclick="eyebtn()"></i>
+              <!-- </span> -->
+            </span>
             <!-- <div class="progress-bar_wrap">
               <div class="progress-bar_item progress-bar_item-1"></div>
               <div class="progress-bar_item progress-bar_item-2"></div>
@@ -237,7 +241,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p>Already have an account? <a href="login.php">Login here</a>.</p>
         </form>
 
+
         <script type="text/javascript">
+          var eyebtn = function() {
+            console.log(this)
+            if (document.getElementById("pw").type === "password") {
+              document.getElementById("pw").type = "text";
+              document.getElementById("eye").className = "fas fa-eye";
+            } else {
+              document.getElementById("pw").type = "password";
+              document.getElementById("eye").className = "fas fa-eye-slash";
+            }
+          }
+
           let removeValidationClasses = function() {
             let failEles = document.querySelectorAll('.Fail');
             let succEles = document.querySelectorAll('.Success');
@@ -300,11 +316,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             let re = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
             if (!email.value.match(re)) {
               // if (!(re.test(email))) {
-              console.log("Email must be of format A@B.C")
+              // console.log("Email must be of format A@B.C")
+              $(".errpop").remove();
+              email.insertAdjacentHTML('afterend', '<div style="margin-top: 10px;" class="errpop alert alert-danger">This field must be of format aaa@bbb</div>');
               email.classList.add('Fail');
               document.querySelector('button[type="submit"]').disabled = true;
               disableTrueArray[2] = false;
             } else {
+              $(".errpop").remove();
               email.classList.remove('Fail');
               email.classList.add('Success');
               disableTrueArray[2] = true;
@@ -312,32 +331,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               enableSubmitCheck();
             }
           }
-
           var checkPW = function() {
+            var appender = document.getElementById("pw-span");
+            // var appender = $("#pw-span");
+            console.log(appender);
             // let re = "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$";
             if (!pw.value.match(/[a-z]/g)) {
-              console.log("At least 1 lowercase character failed")
-              pw.classList.add('Fail');
+              $(".errpop").remove();
+              appender.insertAdjacentHTML('afterend', '<div style="margin-top: 10px;" class="errpop alert alert-danger">At least 1 lowercase character</div>');
+              // console.log("At least 1 lowercase character failed")
+              appender.classList.add('Fail');
+              // pw.classList.add('Fail');
               document.querySelector('button[type="submit"]').disabled = true;
               disableTrueArray[3] = false;
             } else if (!pw.value.match(/[A-Z]/g)) {
-              pw.classList.add('Fail');
+              $(".errpop").remove();
+              appender.insertAdjacentHTML('afterend', '<div style="margin-top: 10px;" class="errpop alert alert-danger">At least 1 uppercase character</div>');
+              appender.classList.add('Fail');
               document.querySelector('button[type="submit"]').disabled = true;
               disableTrueArray[3] = false;
-              console.log("At least 1 uppercase character failed")
+              // console.log("At least 1 uppercase character failed")
             } else if (!pw.value.match(/[0-9]/g)) {
-              pw.classList.add('Fail');
+              appender.classList.add('Fail');
               document.querySelector('button[type="submit"]').disabled = true;
               disableTrueArray[3] = false;
-              console.log("At least 1 digit failed")
+              $(".errpop").remove();
+              appender.insertAdjacentHTML('afterend', '<div style="margin-top: 10px;" class="errpop alert alert-danger">Minimum 1 digit</div>');
+              // console.log("At least 1 digit failed")
             } else if (pw.value.length < 8) {
-              pw.classList.add('Fail');
+              appender.classList.add('Fail');
               document.querySelector('button[type="submit"]').disabled = true;
               disableTrueArray[3] = false;
-              console.log("Minimum 8 characters failed")
+              $(".errpop").remove();
+              appender.insertAdjacentHTML('afterend', '<div style="margin-top: 10px;" class="errpop alert alert-danger">Minimum 8 characters</div>');
             } else {
-              pw.classList.remove('Fail');
-              pw.classList.add('Success');
+              $(".errpop").remove();
+              appender.classList.remove('Fail');
+              appender.classList.add('Success');
               disableTrueArray[3] = true;
               console.log("Validation passed")
               enableSubmitCheck();
@@ -347,10 +377,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           var checkCPW = function() {
             if (cpw.value !== pw.value) {
               cpw.classList.add('Fail');
+              $(".errpop").remove();
+              cpw.insertAdjacentHTML('afterend', '<div style="margin-top: 10px;" class="errpop alert alert-danger">Passwords do not match</div>');
               document.querySelector('button[type="submit"]').disabled = true;
               disableTrueArray[4] = false;
-              console.log("Passwords do not match")
             } else {
+              $(".errpop").remove();
               cpw.classList.remove('Fail');
               cpw.classList.add('Success');
               disableTrueArray[4] = true;
@@ -361,12 +393,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
           var fullname = document.getElementsByClassName("fullname")[0];
           fullname.addEventListener("focusout", checkName);
+          // fullname.addEventListener("mouseleave", checkName);
           var email = document.getElementsByClassName("email")[0];
           email.addEventListener("focusout", checkEmail);
-          var pw = document.getElementsByClassName("password")[0];
+          // email.addEventListener("mouseleave", checkEmail);
+          var pw = document.getElementsByClassName("pw-input")[0];
           pw.addEventListener("focusout", checkPW);
+          // pw.addEventListener("mouseleave", checkPW);
           var cpw = document.getElementsByClassName("confirm_password")[0];
           cpw.addEventListener("focusout", checkCPW);
+          // cpw.addEventListener("mouseleave", checkCPW);
 
           let enableSubmitCheck = function() {
             if (disableTrueArray[0] === true && disableTrueArray[1] === true && disableTrueArray[2] === true && disableTrueArray[3] === true && disableTrueArray[4] === true) {

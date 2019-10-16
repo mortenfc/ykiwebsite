@@ -2,3 +2,5 @@ node_modules/
 vender/
 dist/
 tests/
+mailgunphp.php
+mailgunswift.php

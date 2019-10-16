@@ -16,7 +16,8 @@ if (mysqli_query($conn, $query)) {
   // $stmt->close();
 
   if (isset($_GET['call'])) {
-    require_once './sendEmails.php';
+    require_once './mailgunphp.php';
+    // require_once './sendEmails.php';
     sendVerificationEmail($email, $token);
   } else {
     echo "Errors";
