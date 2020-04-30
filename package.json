@@ -5,7 +5,7 @@
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-solid": "^5.0.13",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "js-datepicker": "^5.0.3",
     "micromodal": "^0.4.2",
     "ol": "^5.3.3",
